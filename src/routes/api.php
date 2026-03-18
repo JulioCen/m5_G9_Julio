@@ -8,7 +8,10 @@ use App\Http\Controllers\EventoController;
 use App\Http\Controllers\PonenteController;
 // Agregar el controlador AsistenteController
 use App\Http\Controllers\AsistenteController;
-
+// ====== "Trampa" para interceptar el error de Auth ======
+Route::get('/login', function () {
+    return response()->json(['message' => 'No autorizado. Se requiere token de Keycloak.'], 401);
+})->name('login');
 // ====== Rutas públicas ======
 
 // Recuperar todos los eventos
@@ -23,27 +26,26 @@ Route::get('/ponentes/{id}', [PonenteController::class, 'show']);
 // ====== Rutas privadas ======
 Route::middleware('auth:api')->group(function () {
     // Almacenar un evento nuevo
-    Route::post('/eventos', [EventoController::class, 'store']);
-    // Actualizar un evento específico
-    Route::put('/eventos/{evento}', [EventoController::class, 'update']);
-    // Eliminar un evento específico
-    Route::delete('/eventos/{id}', [EventoController::class, 'destroy']);
-    // Almacenar un ponente nuevo
-    Route::post('/ponentes', [PonenteController::class, 'store']);
-    // Actualizar un ponente específico
-    Route::put('/ponentes/{ponente}', [PonenteController::class, 'update']);
-    // Eliminar un ponente específico
-    Route::delete('/ponentes/{id}', [PonenteController::class, 'destroy']);
-    // Recuperar todos los asistentes
-    Route::get('/asistentes', [AsistenteController::class, 'index']);
-    // Almacenar un asistente nuevo
-    Route::post('/asistentes', [AsistenteController::class, 'store']);
-    // Recuperar un asistente específico
-    Route::get('/asistentes/{id}', [AsistenteController::class, 'show']);
-    // Actualizar un asistente específico
-    Route::put('/asistentes/{asistente}', [AsistenteController::class,
-    'update']);
-    // Eliminar un asistente específico
-    Route::delete('/asistentes/{id}', [AsistenteController::class,
-    'destroy']);
-});
+        Route::post('/eventos', [EventoController::class, 'store']);
+            // Actualizar un evento específico
+                Route::put('/eventos/{evento}', [EventoController::class, 'update']);
+                    // Eliminar un evento específico
+                        Route::delete('/eventos/{id}', [EventoController::class, 'destroy']);
+                            // Almacenar un ponente nuevo
+                                Route::post('/ponentes', [PonenteController::class, 'store']);
+                                    // Actualizar un ponente específico
+                                        Route::put('/ponentes/{ponente}', [PonenteController::class, 'update']);
+                                            // Eliminar un ponente específico
+                                                Route::delete('/ponentes/{id}', [PonenteController::class, 'destroy']);
+                                                    // Recuperar todos los asistentes
+                                                        Route::get('/asistentes', [AsistenteController::class, 'index']);
+                                                            // Almacenar un asistente nuevo
+                                                                Route::post('/asistentes', [AsistenteController::class, 'store']);
+                                                                    // Recuperar un asistente específico
+                                                                        Route::get('/asistentes/{id}', [AsistenteController::class, 'show']);
+                                                                            // Actualizar un asistente específico
+                                                                                Route::put('/asistentes/{asistente}', [AsistenteController::class,
+                                                                                    'update']);
+                                                                                        // Eliminar un asistente específico
+                                                                                            Route::delete('/asistentes/{id}', [AsistenteController::class,
+                                                                                                'destroy']);
